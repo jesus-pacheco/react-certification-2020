@@ -50,9 +50,9 @@ const VideosPage = () => {
   return (
     <PageLayout>
       <TopContainer>
-        <SearchInput onSearchChange={(term) => setSearch(term)} />
+        <SearchInput value="Wizeline" onSearchChange={(term) => setSearch(term)} />
       </TopContainer>
-      <VideoList>{renderVideos()}</VideoList>
+      <VideoList data-testid="video-list">{renderVideos()}</VideoList>
     </PageLayout>
   );
 };

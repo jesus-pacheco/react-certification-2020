@@ -50,7 +50,7 @@ const FavoriteVideosPage = () => {
 
   return (
     <PageLayout>
-      <VideoList>{renderVideos()}</VideoList>
+      <VideoList data-testid="video-list">{renderVideos()}</VideoList>
     </PageLayout>
   );
 };

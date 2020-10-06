@@ -1,39 +1,60 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useReducer } from 'react';
 
-import { FAV_VIDEO_STORAGE_KEY } from '../../utils/constants';
+import {
+  FAV_VIDEO_STORAGE_KEY,
+  SET_CURRENT_VIDEO,
+  ADD_FAVORITE_VIDEO,
+  REMOVE_FAVORITE_VIDEO,
+} from '../../utils/constants';
 import { storage } from '../../utils/storage';
 
 const VideoContext = React.createContext({
   currentVideo: null,
-  setCurrentVideo: () => {},
   favoriteVideos: [],
-  addFavoriteVideo: () => {},
-  removeFavoriteVideo: () => {},
+  addFavorite: () => {},
+  removeFavorite: () => {},
+  setCurrentVideo: () => {},
   isFavorite: () => {},
 });
 
 const VideoProvider = ({ children }) => {
-  const [currentVideo, setCurrentVideo] = useState(null);
-  const [favoriteVideos, setFavoriteVideos] = useState([]);
+  const [{ currentVideo, favoriteVideos }, dispatch] = useReducer(
+    (innerState, action) => {
+      switch (action.type) {
+        case SET_CURRENT_VIDEO:
+          return { ...innerState, currentVideo: action.payload };
+        case ADD_FAVORITE_VIDEO: {
+          const final = [...innerState.favoriteVideos, action.payload];
+          storage.set(FAV_VIDEO_STORAGE_KEY, final);
+          return { ...innerState, favoriteVideos: final };
+        }
+        case REMOVE_FAVORITE_VIDEO: {
+          const final = innerState.favoriteVideos.filter(
+            (item) => item !== action.payload
+          );
+          storage.set(FAV_VIDEO_STORAGE_KEY, final);
+          return { ...innerState, favoriteVideos: final };
+        }
+        default:
+          return innerState;
+      }
+    },
+    {
+      currentVideo: null,
+      favoriteVideos: storage.get(FAV_VIDEO_STORAGE_KEY) || [],
+    }
+  );
 
-  useEffect(() => {
-    setFavoriteVideos(storage.get(FAV_VIDEO_STORAGE_KEY) || []);
+  const addFavorite = useCallback((id) => {
+    dispatch({ type: ADD_FAVORITE_VIDEO, payload: id });
   }, []);
 
-  const addFavoriteVideo = useCallback((videoId) => {
-    setFavoriteVideos((favVideos) => {
-      const final = [...favVideos, videoId];
-      storage.set(FAV_VIDEO_STORAGE_KEY, final);
-      return final;
-    });
+  const removeFavorite = useCallback((id) => {
+    dispatch({ type: REMOVE_FAVORITE_VIDEO, payload: id });
   }, []);
 
-  const removeFavoriteVideo = useCallback((videoId) => {
-    setFavoriteVideos((favVideos) => {
-      const final = favVideos.filter((item) => item !== videoId);
-      storage.set(FAV_VIDEO_STORAGE_KEY, final);
-      return final;
-    });
+  const setCurrentVideo = useCallback((video) => {
+    dispatch({ type: SET_CURRENT_VIDEO, payload: video });
   }, []);
 
   const isFavorite = useCallback(
@@ -50,11 +71,11 @@ const VideoProvider = ({ children }) => {
     <VideoContext.Provider
       value={{
         currentVideo,
-        setCurrentVideo,
         favoriteVideos,
-        addFavoriteVideo,
-        removeFavoriteVideo,
         isFavorite,
+        addFavorite,
+        removeFavorite,
+        setCurrentVideo,
       }}
     >
       {children}

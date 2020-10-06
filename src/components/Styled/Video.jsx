@@ -89,13 +89,6 @@ const VideoContent = styled.div`
   padding-right: 1em;
 `;
 
-const FavoriteIcon = styled.img`
-  cursor: pointer;
-  display: block;
-  height: 20px;
-  margin-left: auto;
-`;
-
 export {
   VideoList,
   VideoDetailLayout,
@@ -106,5 +99,4 @@ export {
   VideoData,
   RelatedVideoList,
   VideoDetailMain,
-  FavoriteIcon,
 };

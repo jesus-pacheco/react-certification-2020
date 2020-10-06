@@ -1,7 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 
 const commontheme = {
-  fontFam: "'Roboto', sans-serif",
+  fontFam: "'Open Sans', sans-serif;",
 };
 
 export const lightTheme = {
@@ -10,6 +10,8 @@ export const lightTheme = {
   text: '#121212',
   bgCard: '#fff',
   cardDataText: '#606060',
+  activeLink: '#848484',
+  hoverLink: '#505050',
 };
 
 export const darkTheme = {
@@ -18,6 +20,8 @@ export const darkTheme = {
   text: '#fff',
   bgCard: '#354146',
   cardDataText: '#aeb8bb',
+  activeLink: '#686868',
+  hoverLink: '#ccc',
 };
 
 export default createGlobalStyle`
@@ -36,9 +40,9 @@ export default createGlobalStyle`
     background-color: ${(props) => props.theme.bg};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     margin: 0;
     padding: 0;
-    text-rendering: optimizeLegibility;
 
     transition: 0.5s;
   }
@@ -49,14 +53,16 @@ export default createGlobalStyle`
     padding: 0.4rem;
   }
 
-  a {
-    text-decoration: none;
-    font-weight: bold;
-    color: ${(props) => props.theme.text};
+  input { 
+    font-family: ${(props) => props.theme.fontFam}
   }
 
-  /* 
-  a:active {
-    color: blueviolet;
-  } */
+  a {
+    text-decoration: none;
+    font-weight: 600;
+    color: ${(props) => props.theme.text};
+    &:hover {
+      color: ${(props) => props.theme.hoverLink};
+    }
+  }
 `;

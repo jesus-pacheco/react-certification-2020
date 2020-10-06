@@ -6,7 +6,7 @@ export default ({ q, rel, id }) => {
   const [url, setUrl] = useState('');
 
   useEffect(() => {
-    const tmp = `?key=AIzaSyBIYsbIZJmbWLYEpNHa6RnTgJNsqLgc7Wc&part=snippet&type=video`;
+    const tmp = `?key=${process.env.REACT_APP_YOUTUBE_KEY}&part=snippet&type=video`;
 
     if (q || rel || id) {
       let params = '';

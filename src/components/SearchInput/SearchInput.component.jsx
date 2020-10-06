@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { SearchContainer, SearchInput, SearchIcon, SearchIconImg } from '../Styled/Input';
 import searchIcon from '../../img/search-icon.svg';
 
-export default ({ onSearchChange = () => {} }) => {
-  const [searchTerm, setSearchTerm] = useState('Wizeline');
+export default ({ value = '', onSearchChange = () => {} }) => {
+  const [searchTerm, setSearchTerm] = useState(value);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -17,12 +17,13 @@ export default ({ onSearchChange = () => {} }) => {
   }, [onSearchChange, searchTerm]);
 
   return (
-    <SearchContainer>
+    <SearchContainer data-testid="search-input-container">
       <SearchInput
         value={searchTerm}
         onChange={(e) => {
           setSearchTerm(e.target.value);
         }}
+        data-testid="search-input"
       />
       <SearchIcon>
         <SearchIconImg src={searchIcon} />

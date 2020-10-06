@@ -4,108 +4,26 @@ import styled from 'styled-components';
 
 import { useAuth } from '../../providers/Auth';
 
-const NavContainer = styled.div`
-  padding: 0px 250px;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: flex-start;
-  align-items: center;
-  height: 64px;
-`;
+import {
+  NavContainer,
+  LeftContainer,
+  RightContainer,
+  ItemList,
+  NavItem,
+  NavAction,
+  NavBrand,
+  Header,
+  Nav,
+  Toggle,
+  ToggleInput,
+  ToggleSpan,
+} from '../Styled/Nav';
 
-const LeftContainer = styled.div`
-  display: flex;
-  flex-basis: auto;
-`;
-
-const RightContainer = styled.div`
-  display: flex;
-  margin-left: auto;
-`;
-
-const ItemList = styled.ul`
-  flex-direction: row;
-  display: flex;
-  list-style-type: none;
-  overflow: hidden;
-  margin: 0;
-  margin-right: auto;
-  padding: 0;
-`;
-
-const NavItem = styled.li`
-  display: inline-block;
-  padding: 0 5px;
-`;
-
-const NavAction = styled.li`
-  display: inline-block;
-  padding: 0 5px;
-`;
-
-const Title = styled.h2`
-  display: inline-block;
-  margin-right: 15px;
-`;
-
-const Header = styled.header`
-  width: 100vw;
-`;
-
-const Nav = styled.nav`
-  margin-bottom: 30px;
-  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-    0px 1px 3px 0px rgba(0, 0, 0, 0.12);
-`;
-
-const ThemeSwitch = styled.label`
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-  & input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-
-  & input:checked + span {
-    background-color: #354146;
-  }
-
-  & input:checked + span:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-  }
-
-  & span {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-  }
-  & span:before {
-    position: absolute;
-    content: '';
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
+const StyledNavLink = styled(NavLink)`
+  &.${'active'} {
+    color: ${(props) => props.theme.activeLink};
   }
 `;
-
-const activeStyle = {
-  color: 'blue',
-};
 
 export default ({ theme, onChangeTheme }) => {
   const { authenticated, logout } = useAuth();
@@ -120,36 +38,36 @@ export default ({ theme, onChangeTheme }) => {
   const renderActionLinks = () => {
     if (authenticated) {
       return (
-        <Link to="/" onClick={deAuthenticate}>
-          Log Out
+        <Link to="/" onClick={deAuthenticate} data-testid="nav-logout">
+          Logout
         </Link>
       );
     }
 
     return (
-      <NavLink activeStyle={activeStyle} exact to="/login">
-        Log in
-      </NavLink>
+      <StyledNavLink exact to="/login" data-testid="nav-login">
+        Login
+      </StyledNavLink>
     );
   };
 
   return (
     <Header>
-      <Nav>
+      <Nav data-testid="nav-bar">
         <NavContainer>
-          <Title>Youtube Client</Title>
+          <NavBrand data-testid="nav-brand">Youtube Client</NavBrand>
           <LeftContainer>
             <ItemList>
               <NavItem>
-                <NavLink activeStyle={activeStyle} exact to="/">
+                <StyledNavLink exact to="/">
                   Videos
-                </NavLink>
+                </StyledNavLink>
               </NavItem>
               <NavItem>|</NavItem>
               <NavItem>
-                <NavLink activeStyle={activeStyle} exact to="/fav-videos">
+                <StyledNavLink exact to="/fav-videos">
                   Favorites
-                </NavLink>
+                </StyledNavLink>
               </NavItem>
             </ItemList>
           </LeftContainer>
@@ -157,16 +75,16 @@ export default ({ theme, onChangeTheme }) => {
             <ItemList>
               <NavAction>{renderActionLinks()}</NavAction>
               <NavAction>
-                <ThemeSwitch>
-                  <input
-                    type="checkbox"
+                <Toggle>
+                  <ToggleInput
                     checked={theme === 'dark'}
-                    onChange={(ev) =>
-                      onChangeTheme((ev.target.checked && 'dark') || 'light')
-                    }
+                    onChange={({ target: { checked } }) => {
+                      onChangeTheme((checked && 'dark') || 'light');
+                    }}
+                    data-testid="nav-toggle-input"
                   />
-                  <span />
-                </ThemeSwitch>
+                  <ToggleSpan />
+                </Toggle>
               </NavAction>
             </ItemList>
           </RightContainer>

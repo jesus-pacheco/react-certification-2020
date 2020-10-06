@@ -2,11 +2,10 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import { VideoContext } from '../../providers/Video';
-import { FavoriteIcon } from '../Styled/Video';
 import { ReactComponent as HeartIcon } from '../../img/heart-icon.svg';
-import filledHeartIcon from '../../img/filled-heart-icon.svg';
+import { ReactComponent as HeartIconFilled } from '../../img/heart-icon-filled.svg';
 
-const ThemedHeartIcon = styled(HeartIcon)`
+const ThemedIcon = styled.div`
   fill: ${(props) => props.theme.cardDataText};
   cursor: pointer;
   display: block;
@@ -15,22 +14,34 @@ const ThemedHeartIcon = styled(HeartIcon)`
 `;
 
 export default ({ id }) => {
-  const { addFavoriteVideo, removeFavoriteVideo, isFavorite } = useContext(VideoContext);
+  const { addFavorite, removeFavorite, isFavorite } = useContext(VideoContext);
 
   const toggleFavorite = () => {
     if (isFavorite(id)) {
-      removeFavoriteVideo(id);
+      removeFavorite(id);
     } else {
-      addFavoriteVideo(id);
+      addFavorite(id);
     }
   };
 
   const renderIcon = () => {
     if (!isFavorite(id)) {
-      return <ThemedHeartIcon onClick={toggleFavorite} />;
+      return (
+        <ThemedIcon
+          as={HeartIcon}
+          onClick={toggleFavorite}
+          data-testid="favorite-icon-add"
+        />
+      );
     }
 
-    return <FavoriteIcon src={filledHeartIcon} onClick={toggleFavorite} />;
+    return (
+      <ThemedIcon
+        as={HeartIconFilled}
+        onClick={toggleFavorite}
+        data-testid="favorite-icon-remove"
+      />
+    );
   };
 
   return renderIcon();

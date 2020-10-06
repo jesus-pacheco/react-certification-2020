@@ -94,7 +94,7 @@ const VideoDetailPage = () => {
   return (
     <PageLayout>
       <VideoDetailLayout>
-        <VideoDetailMain>
+        <VideoDetailMain data-testid="detail-main">
           <iframe
             title="video"
             width="970"
@@ -103,15 +103,15 @@ const VideoDetailPage = () => {
             src={`https://www.youtube.com/embed/${id}`}
           />
           <DetailVideoContent>
-            <DetailTitle disableClick>
+            <DetailTitle disableClick data-testid="detail-title">
               <h2>{decode(getVideoProps('title'))}</h2>
             </DetailTitle>
-            <p>{decode(getVideoProps('description'))}</p>
+            <p data-testid="detail-description">{decode(getVideoProps('description'))}</p>
             <InlineChild width="80%">
-              <VideoData>
+              <VideoData data-testid="detail-channel">
                 <p>{decode(getVideoProps('channel'))}</p>
               </VideoData>
-              <VideoData>
+              <VideoData data-testid="detail-date">
                 <p>{getVideoProps('date').toLocaleDateString('en-US')}</p>
               </VideoData>
             </InlineChild>
@@ -120,7 +120,7 @@ const VideoDetailPage = () => {
             </InlineChild>
           </DetailVideoContent>
         </VideoDetailMain>
-        <RelatedVideoList>{renderVideos()}</RelatedVideoList>
+        <RelatedVideoList data-testid="detail-related">{renderVideos()}</RelatedVideoList>
       </VideoDetailLayout>
     </PageLayout>
   );
